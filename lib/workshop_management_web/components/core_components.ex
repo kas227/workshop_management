@@ -296,6 +296,13 @@ defmodule WorkshopManagementWeb.CoreComponents do
     """
   end
 
+
+  def input(%{type: "datetime-local", value: %struct{} = value} = assigns) when struct in [NaiveDateTime, DateTime] do
+    assigns
+    |> assign(:value, NaiveDateTime.to_iso8601(value))
+    |> input()
+  end
+
   def input(%{type: "select"} = assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
