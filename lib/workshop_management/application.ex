@@ -17,9 +17,10 @@ defmodule WorkshopManagement.Application do
       # Start Finch
       {Finch, name: WorkshopManagement.Finch},
       # Start the Endpoint (http/https)
-      WorkshopManagementWeb.Endpoint
+      WorkshopManagementWeb.Endpoint,
       # Start a worker by calling: WorkshopManagement.Worker.start_link(arg)
       # {WorkshopManagement.Worker, arg}
+      WorkshopManagement.Store.KeyValue
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
