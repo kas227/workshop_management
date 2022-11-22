@@ -19,6 +19,7 @@ defmodule WorkshopManagementWeb.Router do
 
     get "/", PageController, :home
     get "/store", StoreController, :index
+    post "/store", StoreController, :new
   end
 
   # Other scopes may use custom stacks.

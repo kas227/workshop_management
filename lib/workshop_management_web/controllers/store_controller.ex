@@ -9,4 +9,12 @@ defmodule WorkshopManagementWeb.StoreController do
 
     render(conn, :index)
   end
+
+  def new(conn, %{"store_key" => key, "store_value" => value}) do
+    :ok = KeyValue.put(key, value)
+
+    conn
+    # |> put_flash(:info, "created") # show flash message
+    |> redirect(to: ~p"/store")
+  end
 end
