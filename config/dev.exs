@@ -55,8 +55,7 @@ config :workshop_management, WorkshopManagementWeb.Endpoint,
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/workshop_management_web/(live|views)/.*(ex)$",
-      ~r"lib/workshop_management_web/templates/.*(eex)$"
+      ~r"lib/workshop_management_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 
