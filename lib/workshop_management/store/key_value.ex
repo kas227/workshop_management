@@ -1,5 +1,6 @@
 defmodule WorkshopManagement.Store.KeyValue do
   use Agent
+  @store_seed %{"hello" => "world", "ausy" => "technologies"}
 
   def start_link(_args) do
     Agent.start_link(fn -> %{} end, name: __MODULE__)
