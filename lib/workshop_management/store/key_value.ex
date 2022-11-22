@@ -10,6 +10,10 @@ defmodule WorkshopManagement.Store.KeyValue do
     Agent.get(__MODULE__, fn store -> Map.get(store, key) end)
   end
 
+  def getAll() do
+    Agent.get(__MODULE__, fn store -> store end)
+  end
+
   def put(key, value) do
     Agent.update(__MODULE__, fn store -> Map.put(store, key, value) end)
   end
