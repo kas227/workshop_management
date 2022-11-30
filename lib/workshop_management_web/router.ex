@@ -20,6 +20,8 @@ defmodule WorkshopManagementWeb.Router do
     get "/", PageController, :home
     get "/store", StoreController, :index
     post "/store", StoreController, :new
+
+    live "/store_live", WorkshopLive.StoreLive, :index
   end
 
   # Other scopes may use custom stacks.
