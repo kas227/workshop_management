@@ -1,0 +1,284 @@
+:PROPERTIES:
+:ID:       ee5f806d-ffd8-41dd-a907-76dc3e61c165
+:END:
+#+title: Workshop Management
+* Todo List
+** Elixir Intro
+Introduction to Elixir and its features:
+#+begin_quote
+Elixir is a dynamic, functional programming language that runs on the Erlang Virtual Machine (BEAM).
+It is designed for building scalable, concurrent, and fault-tolerant applications, such as distributed systems, microservices, and real-time data processing.
+Some of the key features of Elixir that make it a good choice for these kinds of applications include its functional and immutable nature, strong dynamic typing, and excellent support for concurrency and parallelism.
+Elixir also has a friendly and expressive syntax, a rich standard library, and a robust ecosystem of third-party libraries and tools.
+#+end_quote
+
+*** data types
+Some of the essentials of the Elixir programming language include its data types, syntax, and tools.
+
+Elixir has a rich set of data types that support a wide range of operations and use cases.
+Some of the most important data types in Elixir include:
+**** Basics
+Atoms are symbolic constants that are used to represent unique, unchangeable values. Atoms are often used as labels or tags to identify or classify data, or as flags to control the flow of a program.
+#+begin_src elixir
+:ok         # atom
+
+255         # integer
+1.2         # float
+
+x = "Ausy"  # string
+"Hi, #{x}"  # string interpolation
+
+"Hi, " <> "Ausy" # concat
+
+?c              # codepoint (unicode in base10)
+'Hi' == [?H, ?i] # charlist and codepoints
+
+true        # boolean
+
+{:a, "b"}   # tuple
+#+end_src
+
+#+begin_quote
+Tuples are fixed-sized collections of values that are often used to group or pack related data together. Tuples can contain values of any data type, and they can be accessed by index or pattern matched to extract their values.
+#+end_quote
+**** Lists:
+Lists are variable-sized collections of values that are often used to represent sequences, sets, or arrays of data. Lists can contain values of any data type, and they can be accessed by index, appended to, concatenated, and transformed using a wide range of built-in functions.
+#+begin_src elixir
+# create a list
+list = [1, "two", :three]
+
+# get at index
+[1, "two", :three] |> Enum.at(1) # "two"
+
+
+# lists are linked lists
+[0 | list]   # fast because simple new head
+# [0, 1, "two", :three]
+list ++ [4]  # slow iterate all
+# [1, "two", :three, 4]
+#+end_src
+
+**** Maps
+Maps are associative collections of key-value pairs that are often used to represent dictionaries, records, or objects. Maps can contain keys and values of any data type, and they can be accessed by key, updated, merged, and transformed using a wide range of built-in functions.
+#+begin_src elixir
+# map with atom key
+map = %{key: "value", key2: "value2"}
+
+# map with string key
+map2 = %{"key" => "value", "key2" => "value2"}
+
+# change map
+map3 = %{map2 | "key" => "new value"}
+
+# add map
+map4 = Map.put(map3, "key3", "value3")
+#+end_src
+*** pattern matching
+#+begin_quote
+Elixir's pattern matching allows you to easily and efficiently extract values from data structures, bind variables, and control the flow of a program based on the structure and content of the data.
+#+end_quote
+
+#+begin_src elixir
+# Extract the first and second elements from a tuple
+{first, second} = {1, 2}
+first   # 1
+second  # 2
+
+# Bind variables to the first and second elements of a list
+[first, second | rest] = [1, 2, 3, 4, 5]
+first   # 1
+second  # 2
+rest    # [3, 4, 5]
+#+end_src
+
+*** immutability
+#+begin_quote
+Immutability is a fundamental concept in functional programming, and it is a key feature of the Elixir programming language.
+Immutability means that once a value is created, it cannot be changed or modified.
+Instead, if you want to update or transform a value, you have to create a new value that contains the desired changes or transformations.
+#+end_quote
+
+#+begin_src elixir
+a = [:ausy, :pentasys]
+b = a
+a = Enum.reject(a, fn company -> company == :pentasys end)
+IO.inspect(a) # [:ausy]
+IO.inspect(b) # [:ausy, :pentasys]
+#+end_src
+
+** DONE Setup project
+First install phx_new package with ~mix~ via ~hex~.
+#+begin_src bash
+mix archive.install hex phx_new 1.7.0-rc.0
+#+end_src
+
+** DONE Note first steps
+After that generate the phoenix app with:
+#+begin_src bash
+mix phx.new --database sqlite3 workshop_management
+#+end_src
+
+** DONE Minimal Live View Example
+The idea is to create and show a minimal example using liveview. By doing so taking a look at the Websocket and what is send to the client.
+Also following the live-cycle from ~mount~ to ~render~.
+
+/To achive this we create a simple live view. Note that this does not ~use~ the ~WorkshopManagementWeb :live_view~ because this one sets the layout to the app one which contains too much stuff. Instead only ~use Phoenix.LiveView~ with no layout./
+
+#+begin_quote
+If it's not on by default toggle ~liveSocket.enableDebug()~ in the browsers console.
+#+end_quote
+
+
+*** Example:
+#+begin_src elixir
+  def render(assigns) do
+    ~H"""
+    <span>Hello Ausy!</span>
+    """
+  end
+#+end_src
+Have a look at the network-tab:
+- First of we have a very simple html site on first request: only contains the span
+- Then in the WS we have an array with one value: the html
+
+After that we can add a variable
+#+begin_src elixir
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <span>Hello <%= DateTime.utc_now %></span>
+    """
+  end
+#+end_src
+
+Now we have a more interesting WS:
+- One value and two entries in the array: LV splits static content at dynamic content and then places the variable inbetween.
+
+*** Question: What content is now sent via WS?
+#+begin_src elixir
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <span><%= "Hi" %> Hello <%= DateTime.utc_now %></span>
+    """
+  end
+#+end_src
+
+** TODO LV Life Cycle
+
+Next we want to take a look at the LV live cycle.
+Therefore let's add the missing mount function
+#+begin_quote
+    Take a look at the Phoenix.LiveView module and its defined callback
+#+end_quote
+
+#+begin_src elixir
+  @impl true
+  def mount(_params, _session, socket) do
+    {:ok, socket}
+  end
+#+end_src
+
+We have ~_params~ which are parameters like query params etc.
+
+There is ~_session~ which is not relevant for now.
+
+And there is ~socket~ which is /related/ to the websocket.
+With this we can also validate this two times mount behavior we found in the LiveView docs.
+
+#+begin_src elixir
+  @impl true
+  def mount(_params, _session, socket) do
+    IO.inspect(connected?(socket), label: "connected?") # <-- take a look
+    {:ok, socket}
+  end
+#+end_src
+
+[[https://elixirschool.com/images/live_view.png]]
+
+
+** DONE phx gen live workshops base model
+Generate the base workshop model
+#+begin_src bash
+mix phx.gen.live Catalog Workshop workshops title:string description:string organizer:string location:string start:utc_datetime end:utc_datetime registration_deadline:utc_datetime max_participants:integer participants:array:string
+#+end_src
+
+⚠ There were some bugs with datetime which need to be fixed. These are caused by the component setting the value based on the parsed field value.
+For datetime this is elixirs ~DateTime~ type however the html field value has to be a string of ~YYYY-MM-DDTXX-XX~ (i.e. ~to_string()~ without timezone).
+
+
+** Store as live view
+
+Copy everything from the dead view version and assign it to the ~socket~ assigns not ~conn~
+
+#+begin_src elixir
+defmodule WorkshopManagementWeb.WorkshopLive.StoreLive do
+  use WorkshopManagementWeb, :live_view
+  alias WorkshopManagement.Store.KeyValue
+
+  @impl true
+  def mount(_params, _session, socket) do
+    socket = socket
+    |> assign(:store, KeyValue.getAll())
+    {:ok, socket}
+  end
+
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <h2 class="text-2xl font-bold underline my-5">Store</h2>
+    <.store_form />
+    <ul class="my-5">
+      <%= for {key, value} <- @store do %>
+        <li><%= key %>: <%= value %></li>
+      <% end %>
+    </ul>
+    """
+  end
+
+  defp store_form(assigns) do
+    ~H"""
+    <form class="grid items-center gap-2 grid-cols-4" action="/store" method="post">
+      <label class="text-right col-span-1" for="store_key">Key:</label>
+      <input class="rounded col-span-3" type="text" name="store_key" />
+      <label class="text-right col-span-1" for="store_value">Value:</label>
+      <input class="rounded col-span-3" type="text" name="store_value" />
+      <input type="hidden" name="_csrf_token" value={Plug.CSRFProtection.get_csrf_token()} />
+      <button
+        class="col-start-3 col-span-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        type="submit"
+      >
+        Send
+      </button>
+    </form>
+    """
+  end
+end
+#+end_src
+! Note we need to use the full path for ~csrf~ from ~Plug.CSRFProtection~.
+
+*** Form interaction
+In order to make the form work we need to do some changes.
+First let's prevent the form from being sent to the old controller endpoint and instead use phoenix event handling via WebSockets.
+This can be achieved by removing the ~action="/store"~ as well as the ~method="post"~ since we are no longer targeting that.
+Instead add a ~phx-submit="new"~ to let phoenix handle the submission and params in the callback.
+
+#+begin_src elixir
+  @impl true
+  def handle_event("new", params, socket) do
+    {:noreply, socket}
+  end
+#+end_src
+
+#+begin_src elixir
+  defp store_form(assigns) do
+    ~H"""
+    <form phx-submit="new">
+    ...
+    </form>
+    """
+  end
+
+#+end_src
+
+** TODO Render workshops as card
