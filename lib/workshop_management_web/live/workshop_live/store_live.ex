@@ -1,9 +1,14 @@
 defmodule WorkshopManagementWeb.WorkshopLive.StoreLive do
   use WorkshopManagementWeb, :live_view
+  alias Phoenix.PubSub
   alias WorkshopManagement.Store.KeyValue
+
+  @store_update_topic "store_update"
 
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket), do: PubSub.subscribe(WorkshopManagement.PubSub, @store_update_topic)
+
     socket =
       socket
       |> assign(:store, KeyValue.getAll())
@@ -25,9 +30,16 @@ defmodule WorkshopManagementWeb.WorkshopLive.StoreLive do
   def handle_event("new", %{"store_key" => key, "store_value" => value}, socket) do
     :ok = KeyValue.put(key, value)
 
+    :ok = PubSub.broadcast(WorkshopManagement.PubSub, @store_update_topic, "updated")
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info("updated", socket) do
     socket =
       socket
       |> assign(:store, KeyValue.getAll())
+      |> put_flash(:info, "New entry!")
 
     {:noreply, socket}
   end
