@@ -296,8 +296,8 @@ defmodule WorkshopManagementWeb.CoreComponents do
     """
   end
 
-
-  def input(%{type: "datetime-local", value: %struct{} = value} = assigns) when struct in [NaiveDateTime, DateTime] do
+  def input(%{type: "datetime-local", value: %struct{} = value} = assigns)
+      when struct in [NaiveDateTime, DateTime] do
     assigns
     |> assign(:value, NaiveDateTime.to_iso8601(value))
     |> input()
@@ -540,6 +540,49 @@ defmodule WorkshopManagementWeb.CoreComponents do
         <Heroicons.arrow_left solid class="w-3 h-3 stroke-current inline" />
         <%= render_slot(@inner_block) %>
       </.link>
+    </div>
+    """
+  end
+
+  @doc """
+  Renders a simple card.
+
+  ## Examples
+
+      <.card title="Coffee">This is a simple card that talks about Coffee.</.card>
+  """
+  attr :title, :string, required: true
+  attr :tags, :list, default: []
+  slot :inner_block, required: true
+
+  def card(assigns) do
+    ~H"""
+    <div class="shadow shadow-slate-300 p-5 bg-white flex items-center border-b mb-10 border-gray-200 rounded-lg sm:flex-row flex-col">
+      <div class="sm:w-32 sm:h-32 h-20 w-20 sm:mr-10 inline-flex items-center justify-center flex-shrink-0">
+        <img src="https://firebasestorage.googleapis.com/v0/b/thecaffeinecode.appspot.com/o/Tcc_img%2Flogo.png?alt=media&token=5e5738c4-8ffd-44f9-b47a-57d07e0b7939" />
+      </div>
+      <div class="flex-grow sm:text-left text-center mt-6 sm:mt-0">
+        <h1 class="text-black text-2xl title-font font-bold mb-2"><%= @title %></h1>
+        <p class="leading-relaxed text-base">
+          <%= render_slot(@inner_block) %>
+        </p>
+        <div :for={tag <- @tags} class="py-4">
+          <div class=" inline-block mr-2">
+            <div class="flex pr-2 h-full items-center">
+              <Heroicons.check_circle class="text-amber-300" />
+              <p class="title-font font-medium"><%= tag %></p>
+            </div>
+          </div>
+        </div>
+        <div class="md:flex font-bold text-gray-800">
+          <div class="w-full md:w-1/2 flex space-x-3">
+            <div class="w-1/2"></div>
+          </div>
+        </div>
+        <a class="mt-3 text-indigo-500 inline-flex items-center">
+          Learn More
+        </a>
+      </div>
     </div>
     """
   end
