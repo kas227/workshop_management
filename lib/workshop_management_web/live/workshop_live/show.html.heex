@@ -1,0 +1,35 @@
+<.header>
+  Workshop <%= @workshop.id %>
+  <:subtitle>This is a workshop record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/workshops/#{@workshop}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit workshop</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Title"><%= @workshop.title %></:item>
+  <:item title="Organizer"><%= @workshop.organizer %></:item>
+  <:item title="Description"><%= @workshop.description %></:item>
+  <:item title="Location"><%= @workshop.location %></:item>
+  <:item title="Start"><%= @workshop.start %></:item>
+  <:item title="End"><%= @workshop.end %></:item>
+  <:item title="Registration deadline"><%= @workshop.registration_deadline %></:item>
+  <:item title="Max participants"><%= @workshop.max_participants %></:item>
+  <:item title="Participants"><%= @workshop.participants %></:item>
+  <:item title="Cancelled"><%= @workshop.cancelled %></:item>
+</.list>
+
+<.back navigate={~p"/workshops"}>Back to workshops</.back>
+
+<.modal :if={@live_action == :edit} id="workshop-modal" show on_cancel={JS.patch(~p"/workshops/#{@workshop}")}>
+  <.live_component
+    module={WorkshopManagementWeb.WorkshopLive.FormComponent}
+    id={@workshop.id}
+    title={@page_title}
+    action={@live_action}
+    workshop={@workshop}
+    navigate={~p"/workshops/#{@workshop}"}
+  />
+</.modal>

@@ -1,0 +1,48 @@
+<.header>
+  Listing Workshops
+  <:actions>
+    <.link patch={~p"/workshops/new"}>
+      <.button>New Workshop</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="workshops" rows={@workshops} row_click={&JS.navigate(~p"/workshops/#{&1}")}>
+  <:col :let={workshop} label="Title"><%= workshop.title %></:col>
+  <:col :let={workshop} label="Organizer"><%= workshop.organizer %></:col>
+  <:col :let={workshop} label="Description"><%= workshop.description %></:col>
+  <:col :let={workshop} label="Location"><%= workshop.location %></:col>
+  <:col :let={workshop} label="Start"><%= workshop.start %></:col>
+  <:col :let={workshop} label="End"><%= workshop.end %></:col>
+  <:col :let={workshop} label="Registration deadline"><%= workshop.registration_deadline %></:col>
+  <:col :let={workshop} label="Max participants"><%= workshop.max_participants %></:col>
+  <:col :let={workshop} label="Participants"><%= workshop.participants %></:col>
+  <:col :let={workshop} label="Cancelled"><%= workshop.cancelled %></:col>
+  <:action :let={workshop}>
+    <div class="sr-only">
+      <.link navigate={~p"/workshops/#{workshop}"}>Show</.link>
+    </div>
+    <.link patch={~p"/workshops/#{workshop}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={workshop}>
+    <.link phx-click={JS.push("delete", value: %{id: workshop.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="workshop-modal"
+  show
+  on_cancel={JS.navigate(~p"/workshops")}
+>
+  <.live_component
+    module={WorkshopManagementWeb.WorkshopLive.FormComponent}
+    id={@workshop.id || :new}
+    title={@page_title}
+    action={@live_action}
+    workshop={@workshop}
+    navigate={~p"/workshops"}
+  />
+</.modal>
