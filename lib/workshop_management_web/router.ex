@@ -25,9 +25,8 @@ defmodule WorkshopManagementWeb.Router do
 
     live "/workshops", WorkshopLive.Index, :index
     live "/workshops/new", WorkshopLive.Index, :new
-    live "/workshops/:id/edit", WorkshopLive.Index, :edit
-
     live "/workshops/:id", WorkshopLive.Show, :show
+    live "/workshops/:id/edit", WorkshopLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

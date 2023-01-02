@@ -88,6 +88,13 @@ defmodule WorkshopManagementWeb.CoreComponents do
                 </header>
                 <%= render_slot(@inner_block) %>
                 <div :if={@confirm != [] or @cancel != []} class="ml-6 mb-4 flex items-center gap-5">
+                  <.link
+                    :for={cancel <- @cancel}
+                    phx-click={hide_modal(@on_cancel, @id)}
+                    class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                  >
+                    <%= render_slot(cancel) %>
+                  </.link>
                   <.button
                     :for={confirm <- @confirm}
                     id={"#{@id}-confirm"}
@@ -97,13 +104,6 @@ defmodule WorkshopManagementWeb.CoreComponents do
                   >
                     <%= render_slot(confirm) %>
                   </.button>
-                  <.link
-                    :for={cancel <- @cancel}
-                    phx-click={hide_modal(@on_cancel, @id)}
-                    class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
-                  >
-                    <%= render_slot(cancel) %>
-                  </.link>
                 </div>
               </div>
             </.focus_wrap>
