@@ -32,13 +32,6 @@ defmodule WorkshopManagementWeb.WorkshopLive.Index do
     |> assign(:workshop, nil)
   end
 
-  @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
-    workshop = Catalog.get_workshop!(id)
-    {:ok, _} = Catalog.delete_workshop(workshop)
-
-    {:noreply, assign(socket, :workshops, list_workshops())}
-  end
 
   defp list_workshops do
     Catalog.list_workshops()

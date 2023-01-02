@@ -16,6 +16,16 @@ defmodule WorkshopManagementWeb.WorkshopLive.Show do
      |> assign(:workshop, Catalog.get_workshop!(id))}
   end
 
+  @impl true
+  def handle_event("delete", _, %{assigns: %{workshop: workshop}} = socket) do
+    {:ok, _} = Catalog.delete_workshop(workshop)
+
+    {:noreply,
+     socket
+     |> put_flash(:info, "Deleted Workshop - #{workshop.title}")
+     |> push_navigate(to: ~p"/workshops")}
+  end
+
   defp page_title(:show), do: "Show Workshop"
   defp page_title(:edit), do: "Edit Workshop"
 end
