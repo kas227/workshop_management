@@ -9,7 +9,7 @@ defmodule WorkshopManagement.Catalog.Workshop do
     field :location, :string
     field :max_participants, :integer
     field :organizer, :string
-    field :participants, {:array, :string}
+    field :participants, {:array, :string}, default: []
     field :registration_deadline, :utc_datetime
     field :start, :utc_datetime
     field :title, :string
