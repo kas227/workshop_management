@@ -2,30 +2,26 @@
 :ID:       ee5f806d-ffd8-41dd-a907-76dc3e61c165
 :END:
 #+title: Workshop Management
-* Todo List
-** Elixir Intro
+* Elixir Intro
 Introduction to Elixir and its features:
-#+begin_quote
-Elixir is a dynamic, functional programming language that runs on the Erlang Virtual Machine (BEAM).
-It is designed for building scalable, concurrent, and fault-tolerant applications, such as distributed systems, microservices, and real-time data processing.
-Some of the key features of Elixir that make it a good choice for these kinds of applications include its functional and immutable nature, strong dynamic typing, and excellent support for concurrency and parallelism.
-Elixir also has a friendly and expressive syntax, a rich standard library, and a robust ecosystem of third-party libraries and tools.
-#+end_quote
+- dynamic, functional programming language
+- runs on the Erlang Virtual Machine (BEAM)
+- scalable, concurrent, and fault-tolerant
+- friendly and expressive syntax
+- rich standard library
+- robust ecosystem of third-party libraries and tools
 
-*** data types
-Some of the essentials of the Elixir programming language include its data types, syntax, and tools.
-
-Elixir has a rich set of data types that support a wide range of operations and use cases.
+** Data types
 Some of the most important data types in Elixir include:
-**** Basics
-Atoms are symbolic constants that are used to represent unique, unchangeable values. Atoms are often used as labels or tags to identify or classify data, or as flags to control the flow of a program.
+*** Basics
 #+begin_src elixir
 :ok         # atom
+# Atoms are symbolic constants that are used to represent unique, unchangeable values
 
 255         # integer
 1.2         # float
 
-x = "Ausy"  # string
+"Ausy"  # string
 "Hi, #{x}"  # string interpolation
 
 "Hi, " <> "Ausy" # concat
@@ -36,13 +32,13 @@ x = "Ausy"  # string
 true        # boolean
 
 {:a, "b"}   # tuple
+# Tuples are fixed-sized collections of values that are often used to group or pack related data together
 #+end_src
 
-#+begin_quote
-Tuples are fixed-sized collections of values that are often used to group or pack related data together. Tuples can contain values of any data type, and they can be accessed by index or pattern matched to extract their values.
-#+end_quote
-**** Lists:
-Lists are variable-sized collections of values that are often used to represent sequences, sets, or arrays of data. Lists can contain values of any data type, and they can be accessed by index, appended to, concatenated, and transformed using a wide range of built-in functions.
+*** Lists:
+- variable-sized collections of values
+- can contain values of any data type (also mixed)
+
 #+begin_src elixir
 # create a list
 list = [1, "two", :three]
@@ -54,12 +50,14 @@ list = [1, "two", :three]
 # lists are linked lists
 [0 | list]   # fast because simple new head
 # [0, 1, "two", :three]
+
 list ++ [4]  # slow iterate all
 # [1, "two", :three, 4]
 #+end_src
 
-**** Maps
-Maps are associative collections of key-value pairs that are often used to represent dictionaries, records, or objects. Maps can contain keys and values of any data type, and they can be accessed by key, updated, merged, and transformed using a wide range of built-in functions.
+*** Maps
+Can contain keys and values of any data type
+
 #+begin_src elixir
 # map with atom key
 map = %{key: "value", key2: "value2"}
@@ -73,10 +71,11 @@ map3 = %{map2 | "key" => "new value"}
 # add map
 map4 = Map.put(map3, "key3", "value3")
 #+end_src
-*** pattern matching
-#+begin_quote
-Elixir's pattern matching allows you to easily and efficiently extract values from data structures, bind variables, and control the flow of a program based on the structure and content of the data.
-#+end_quote
+
+** Pattern matching
+- easily and efficiently extract values from data structures
+- bind variables
+- control the flow of a program based on the structure and content of the data (compare with guard clauses)
 
 #+begin_src elixir
 # Extract the first and second elements from a tuple
@@ -91,12 +90,9 @@ second  # 2
 rest    # [3, 4, 5]
 #+end_src
 
-*** immutability
-#+begin_quote
-Immutability is a fundamental concept in functional programming, and it is a key feature of the Elixir programming language.
-Immutability means that once a value is created, it cannot be changed or modified.
-Instead, if you want to update or transform a value, you have to create a new value that contains the desired changes or transformations.
-#+end_quote
+** immutability
+- once a value is created, it cannot be changed or modified
+- if you want to update or transform a value, you have to create a new value
 
 #+begin_src elixir
 a = [:ausy, :pentasys]
@@ -106,21 +102,51 @@ IO.inspect(a) # [:ausy]
 IO.inspect(b) # [:ausy, :pentasys]
 #+end_src
 
-** DONE Setup project
+* Phoenix Framework
+#+ATTR_HTML: :width 300px
+[[https://blog.appliscale.io/wp-content/uploads/2020/08/1WvDl2WlPs7cR8TTBvrjpyw.png]]
+~Phoenix~ is a web development framework for building web applications.
+It is easy to use and provides a number of features out of the box:
+
+    - routing system
+    - template engine
+    - built-in testing framework
+    - development server with hot code reloading
+
+* Setup project
 First install phx_new package with ~mix~ via ~hex~.
+- ~Hex~: package manager
+- ~Mix~: build tool
 #+begin_src bash
 mix archive.install hex phx_new 1.7.0-rc.0
 #+end_src
 
-** DONE Note first steps
-After that generate the phoenix app with:
+** Generating the project
+After that generate the phoenix app with /(we select SQLite instead of default Postgres)/:
 #+begin_src bash
 mix phx.new --database sqlite3 workshop_management
 #+end_src
 
-** DONE Minimal Live View Example
-The idea is to create and show a minimal example using liveview. By doing so taking a look at the Websocket and what is send to the client.
-Also following the live-cycle from ~mount~ to ~render~.
+** Starting the Server
+Let's have a look at what we got by starting the server:
+#+begin_src bash
+mix phx.server
+#+end_src
+
+* Simple Store + Form Demo
+It's demo time!
+
+* Phoenix Live View
+~Phoenix Live View~ is a library built *on top of Phoenix* that allows for interactive, real-time web applications
+
+- no need to split between client and server
+- build *interactive* web applications
+- without JavaScript (there is but we don't have to write any :D)
+- alternative to React or Angular
+
+* Minimal Live View Example
+# The idea is to create and show a minimal example using liveview. By doing so taking a look at the Websocket and what is send to the client.
+# Also following the live-cycle from ~mount~ to ~render~.
 
 /To achive this we create a simple live view. Note that this does not ~use~ the ~WorkshopManagementWeb :live_view~ because this one sets the layout to the app one which contains too much stuff. Instead only ~use Phoenix.LiveView~ with no layout./
 
@@ -129,7 +155,7 @@ If it's not on by default toggle ~liveSocket.enableDebug()~ in the browsers cons
 #+end_quote
 
 
-*** Example:
+** Example:
 #+begin_src elixir
   def render(assigns) do
     ~H"""
@@ -154,7 +180,7 @@ After that we can add a variable
 Now we have a more interesting WS:
 - One value and two entries in the array: LV splits static content at dynamic content and then places the variable inbetween.
 
-*** Question: What content is now sent via WS?
+** Question: What content is now sent via WS?
 #+begin_src elixir
   @impl true
   def render(assigns) do
@@ -164,7 +190,7 @@ Now we have a more interesting WS:
   end
 #+end_src
 
-** TODO LV Life Cycle
+* LV Life Cycle
 
 Next we want to take a look at the LV live cycle.
 Therefore let's add the missing mount function
@@ -197,17 +223,7 @@ With this we can also validate this two times mount behavior we found in the Liv
 [[https://elixirschool.com/images/live_view.png]]
 
 
-** DONE phx gen live workshops base model
-Generate the base workshop model
-#+begin_src bash
-mix phx.gen.live Catalog Workshop workshops title:string description:string organizer:string location:string start:utc_datetime end:utc_datetime registration_deadline:utc_datetime max_participants:integer participants:array:string
-#+end_src
-
-⚠ There were some bugs with datetime which need to be fixed. These are caused by the component setting the value based on the parsed field value.
-For datetime this is elixirs ~DateTime~ type however the html field value has to be a string of ~YYYY-MM-DDTXX-XX~ (i.e. ~to_string()~ without timezone).
-
-
-** Store as live view
+* Store as live view
 
 Copy everything from the dead view version and assign it to the ~socket~ assigns not ~conn~
 
@@ -257,7 +273,7 @@ end
 #+end_src
 ! Note we need to use the full path for ~csrf~ from ~Plug.CSRFProtection~.
 
-*** Form interaction
+** Form interaction
 In order to make the form work we need to do some changes.
 First let's prevent the form from being sent to the old controller endpoint and instead use phoenix event handling via WebSockets.
 This can be achieved by removing the ~action="/store"~ as well as the ~method="post"~ since we are no longer targeting that.
@@ -281,4 +297,80 @@ Instead add a ~phx-submit="new"~ to let phoenix handle the submission and params
 
 #+end_src
 
-** TODO Render workshops as card
+** Send and Receive live Updates
+In order to also receive new entries across different sessions of users we can make use of ~Phoenix.PubSub~.
+This allows to create topics which we can subscribe and send messages to.
+
+First we set the topic as a value.
+#+begin_src elixir
+  @store_update_topic "store_update"
+#+end_src
+
+Also subscribe to the topic and then handle messages:
+#+begin_src elixir
+  @impl true
+  def mount(_params, _session, socket) do
+    if connected?(socket), do: PubSub.subscribe(WorkshopManagement.PubSub, @store_update_topic)
+
+    socket =
+      socket
+      |> assign(:store, KeyValue.getAll())
+
+    {:ok, socket}
+  end
+
+  @impl true
+  def handle_info("updated", socket) do
+    socket =
+      socket
+      |> assign(:store, KeyValue.getAll())
+      |> put_flash(:info, "New entry!")
+
+    {:noreply, socket}
+  end
+#+end_src
+
+Then, we can broadcast the update message to the topic:
+#+begin_src elixir
+  @impl true
+  def handle_event("new", %{"store_key" => key, "store_value" => value}, socket) do
+    :ok = KeyValue.put(key, value)
+
+    :ok = PubSub.broadcast_from(WorkshopManagement.PubSub, self(), @store_update_topic, "updated") # <-- send to topic
+    {:noreply, socket}
+  end
+#+end_src
+Notice how we can also remove the assignment to ~:store~ because we do that in the handling of the broadcasted message.
+* Extract workshops
+#+begin_src javascript
+var table = document.getElementById("DetailsView1");
+const data = {};
+
+for (let i = 0; i < table.rows.length; i++) {
+  const row = table.rows[i];
+  const key = row.cells[0].textContent;
+  const value = row.cells[1].textContent;
+  const keys = key.split('/').map(k => k.trim());
+  const values = value.split('/').map(v => v.trim());
+  for (let j = 0; j < keys.length; j++) {
+    const currentKey = keys[j];
+    const currentData = values[j] || "";
+    data[currentKey] = currentData;
+  }
+}
+
+const json = JSON.stringify(data);
+// Create a CSV string from the data array
+copy(json);
+#+end_src
+
+* phx gen live workshops base model
+Generate the base workshop model
+#+begin_src bash
+mix phx.gen.live Catalog Workshop workshops title:string organizer:string description:string location:string start:utc_datetime end:utc_datetime registration_deadline:utc_datetime max_participants:integer participants:array:string cancelled:boolean
+#+end_src
+
+⚠ There were some bugs with datetime which need to be fixed. These are caused by the component setting the value based on the parsed field value.
+For datetime this is elixirs ~DateTime~ type however the html field value has to be a string of ~YYYY-MM-DDTXX-XX~ (i.e. ~to_string()~ without timezone).
+
+* Render workshops as card
