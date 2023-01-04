@@ -33,6 +33,14 @@ true        # boolean
 
 {:a, "b"}   # tuple
 # Tuples are fixed-sized collections of values that are often used to group or pack related data together
+
+defmodule ModuleName do
+  # ... body
+end
+
+def function() do
+  # ... body
+end
 #+end_src
 
 *** Lists:
@@ -90,6 +98,22 @@ second  # 2
 rest    # [3, 4, 5]
 #+end_src
 
+** Pipe Operator |>
+- allows for untangling function calls
+- pipe operator which looks like |> takes the result of one expression, and passes it on
+
+#+begin_src elixir
+foo(bar(baz()))
+#+end_src
+
+Here, we are passing the value baz/1 to bar/1 to foo/1.
+
+Rewritten with the pipe operator this becomes:
+#+begin_src elixir
+baz() |> bar() |> foo()
+#+end_src
+The pipe takes the result on the left, and passes it to the right hand side.
+
 ** immutability
 - once a value is created, it cannot be changed or modified
 - if you want to update or transform a value, you have to create a new value
@@ -101,6 +125,22 @@ a = Enum.reject(a, fn company -> company == :pentasys end)
 IO.inspect(a) # [:ausy]
 IO.inspect(b) # [:ausy, :pentasys]
 #+end_src
+
+* Now it's your turn!
+Enter Elixirs interactive shell (IEx):
+#+begin_src bash
+iex
+#+end_src
+
+Then explore the basics we've just learned.
+
+1. Create a list containing the atom ~:hello~ and the string ~"world!"~.
+
+2. Next, calculate the average of the following list:
+#+begin_src elixir
+[1, 2, 3, 4, 5, 6]
+#+end_src`
+Hint: Take a look at ~Enum.sum/1~ and ~div/2~ for example with ~h(Enum.sum/1)~ in IEx.
 
 * Phoenix Framework
 #+ATTR_HTML: :width 300px
@@ -373,4 +413,4 @@ mix phx.gen.live Catalog Workshop workshops title:string organizer:string descri
 ⚠ There were some bugs with datetime which need to be fixed. These are caused by the component setting the value based on the parsed field value.
 For datetime this is elixirs ~DateTime~ type however the html field value has to be a string of ~YYYY-MM-DDTXX-XX~ (i.e. ~to_string()~ without timezone).
 
-* Render workshops as card
+* TODO Render workshops as card
