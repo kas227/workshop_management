@@ -22,6 +22,12 @@ defmodule WorkshopManagementWeb.Router do
     post "/store", StoreController, :new
 
     live "/store_live", WorkshopLive.StoreLive, :index
+
+    live "/workshops", WorkshopLive.Index, :index
+    live "/workshops/new", WorkshopLive.Index, :new
+    live "/workshops/:id/edit", WorkshopLive.Index, :edit
+
+    live "/workshops/:id", WorkshopLive.Show, :show
   end
 
   # Other scopes may use custom stacks.

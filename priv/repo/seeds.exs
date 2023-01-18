@@ -9,3 +9,18 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+alias WorkshopManagement.Repo
+alias WorkshopManagement.Catalog.Workshop
+
+json_file = "#{__DIR__}/workshops.json"
+
+with {:ok, body} <- File.read(json_file),
+     {:ok, json} <- Jason.decode(body, keys: :strings) do
+  json
+  |> Enum.each(fn workshop ->
+    Workshop.changeset(%Workshop{}, workshop)
+    |> Repo.insert!()
+  end)
+else
+  err -> IO.inspect(err)
+end
